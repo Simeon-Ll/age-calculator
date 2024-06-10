@@ -19,6 +19,9 @@ export default {
         '5xl':'30px',
         '7xl':'120px'
       },
+      fontSize:{
+       '5xl': '45px'
+      },
       screens: {
         'sm': '430px',
       },
