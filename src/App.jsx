@@ -4,6 +4,13 @@ import logic from './logic'
 
 
 function App() {
+
+  const [error, setError] = React.useState({
+    dayError: logic.error.dayError,
+    monthError: logic.error.monthError,
+    yearError: logic.error.yearError,
+  })
+  
   const [ageData, setAgeData] = React.useState({
     year: '',
     month: '',
@@ -24,10 +31,11 @@ function App() {
   };
 
   const handleSubmit = (event) => {
-      
-      let data = logic.calculate(ageData.day, ageData.month - 1, ageData.year)
+      event.preventDefault()
+      let data = logic.check(ageData.day, ageData.month, ageData.year)
       setAge(prev => prev = data)
-      console.log(data.day, logic.age);
+      setError(logic.error)
+      
     };
 
   return (
@@ -37,23 +45,38 @@ function App() {
 
         <div>
           <h3 className=' font-semibold text-Smokey-grey text-xs'>DAY</h3>
-          <input type="number" name="day" id="day" value={ageData.day} onChange={handleChange} className=' border-2 border-Light-gray rounded-lg w-16 sm:w-24 text-md sm:text-xl h-10 sm:h-12 px-1 font-bold pl-3'/>
+          <input type="number" name="day" id="day" value={ageData.day} onChange={handleChange} style={{borderColor:(error.dayError.state ? 'hsl(0, 100%, 67%)' : 'hsl(0, 0%, 86%)')}}  className=' border-2 border-Light-gray rounded-lg w-16 sm:w-24 text-md sm:text-xl h-10 sm:h-12 px-1 font-bold pl-3'/>
+          {error.dayError.state && 
+          <div className='text-xs text-Light-red'>
+            {error.dayError.error}
+          </div>
+          }
         </div>
 
         <div>
           <h3 className=' font-semibold text-Smokey-grey text-xs'>MONTH</h3>
-          <input type="number" name="month" id="month" value={ageData.month} onChange={handleChange} className=' border-2 border-Light-gray rounded-lg w-16 sm:w-24 text-md sm:text-xl h-10 sm:h-12 px-1 font-bold pl-3' />
+          <input type="number" name="month" id="month" value={ageData.month} onChange={handleChange} style={{borderColor:(error.monthError.state ? 'hsl(0, 100%, 67%)' : 'hsl(0, 0%, 86%)')}} className=' border-2 border-Light-gray rounded-lg w-16 sm:w-24 text-md sm:text-xl h-10 sm:h-12 px-1 font-bold pl-3' />
+          {error.monthError.state && 
+          <div className='text-xs text-Light-red'>
+            {error.monthError.error}
+          </div>
+          }
         </div>
 
         <div>
           <h3 className=' font-semibold text-Smokey-grey text-xs'>YEAR</h3>
-          <input type="number" name="year" id="year" value={ageData.year} onChange={handleChange} className=' border-2 border-Light-gray rounded-lg w-16 sm:w-24 text-md sm:text-xl h-10 sm:h-12 px-1 font-bold pl-3'/>
+          <input type="number" name="year" id="year" value={ageData.year} onChange={handleChange} style={{borderColor:(error.yearError.state ? 'hsl(0, 100%, 67%)' : 'hsl(0, 0%, 86%)')}} className=' border-2 border-Light-gray rounded-lg w-16 sm:w-24 text-md sm:text-xl h-10 sm:h-12 px-1 font-bold pl-3'/>
+          {error.yearError.state && 
+          <div className='text-xs text-Light-red'>
+            {error.yearError.error}
+          </div>
+          }
         </div>
 
       </div>
 
-      <div className=' absolute top-28 sm:top-24 w-10/12 flex justify-center sm:justify-end' onClick={handleSubmit}>
-        <div className='bg-Purple right-0 p-4 rounded-full hover:bg-black ' >
+      <div className=' absolute top-28 sm:top-24 w-10/12 flex justify-center sm:justify-end' >
+        <div className='bg-Purple right-0 p-4 rounded-full hover:bg-black ' onClick={handleSubmit}>
         <img src={arrow} alt="" className='w-8'/>
         </div>
       </div>

@@ -1,7 +1,4 @@
-const $id = item => document.getElementById(item)
-
-
-let dayError = {}, monthError = {}, yearError = {}
+let dayError = {state: false}, monthError = {state: false}, yearError = {state: false}
 
 let currentDate = new Date()
 let currentYear = currentDate.getFullYear()
@@ -68,12 +65,78 @@ const calculate = (inputDay, inputMonth, inputYear) =>{
     }
 }
 
+let state = false
+
+const check = (inputDay, inputMonth, inputYear) =>{
+
+    
+   if (inputDay == '') {
+    dayError.state = true
+    dayError.error = 'This field is required'
+    state = false
+   }else if (inputDay > daysOfTheMonth[inputMonth] || (inputDay == 29 && inputMonth == 2 && inputYear % 4 != 0)) {
+    dayError.state = true
+    dayError.error = 'Must be a valid day'
+    state = false
+   }else{
+    state = true
+    dayError.state = false
+   }
+
+   if (inputMonth == '') {
+    monthError.state = true
+    monthError.error = 'This field is required'
+    state = false
+   }else if (inputMonth > 11) {
+    monthError.state = true
+    monthError.error = 'Must be a valid month'
+    state = false
+   }else{
+    state = true
+    monthError.state = false
+   }
+
+   if (inputYear == '') {
+    yearError.state = true
+    yearError.error = 'This field is required'
+    state = false
+   }else if (inputYear > currentYear) {
+    yearError.state = true
+    yearError.error = 'Must be in the past'
+    state = false
+   }else{
+    state = true
+    yearError.state = false
+   }
+   
+
+if (dayError.state || monthError.state || yearError.state) {
+    
+    return {
+        year: '--',
+        month: '--',
+        day: '--',
+    }
+
+}else{
+    
+    return calculate(inputDay, inputMonth-1, inputYear)
+}
+   
+}
+
 
 
 
 
 export default{
     age,
-    calculate,
+    check,
+    error:{
+      dayError,
+      monthError,
+      yearError  
+    }
+    
     
 }
